@@ -1,0 +1,6 @@
+src/App.tsx(53,10): error TS6133: 'stealthResult' is declared but its value is never read.
+src/App.tsx(54,10): error TS6133: 'escortProgress' is declared but its value is never read.
+src/App.tsx(55,10): error TS6133: 'resourceCollected' is declared but its value is never read.
+src/App.tsx(650,38): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+src/App.tsx(736,38): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+src/App.tsx(804,40): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
