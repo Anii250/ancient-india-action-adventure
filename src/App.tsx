@@ -18,6 +18,7 @@ import { SkillTree } from "./components/SkillTree";
 import { InventoryPanel } from "./components/InventoryPanel";
 import { StealthScreen } from "./components/StealthScreen";
 import { EscortScreen } from "./components/EscortScreen";
+import { playBGM, playClickSFX } from "./utils/audio";
 
 type Screen =
   | "splash"
@@ -129,6 +130,7 @@ export function App() {
   };
 
   const advanceMission = () => {
+    playClickSFX();
     const next = missionIndex + 1;
     if (next >= level.missions.length) {
       setTimeout(() => setScreen("level_complete"), 400);
@@ -146,6 +148,8 @@ export function App() {
   };
 
   const startLevel = (idx: number) => {
+    playClickSFX();
+    playBGM(); // Ensure BGM is playing when starting a level
     setCurrentLevelIndex(idx);
     setMissions([...GAME_LEVELS[idx].missions]);
     setMissionIndex(0);
@@ -166,15 +170,18 @@ export function App() {
   };
 
   const handleCombatDefeat = () => {
+    playClickSFX();
     setScreen("game_over");
   };
 
   const handleCombatFlee = () => {
+    playClickSFX();
     showMsg("You fled the battle. Regroup and try again!");
     setScreen("mission_hub");
   };
 
   const unlockSkill = (skillId: string) => {
+    playClickSFX();
     const skill = skills.find((s) => s.id === skillId);
     if (!skill || skill.unlocked || player.stats.xp < skill.cost) return;
 
@@ -294,7 +301,11 @@ export function App() {
           </div>
 
           <button
-            onClick={() => setScreen("level_map")}
+            onClick={() => {
+              playClickSFX();
+              playBGM(); // Start BGM on user's first intentional click
+              setScreen("level_map");
+            }}
             className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white font-bold py-4 px-12 rounded-xl text-xl transition-all transform hover:scale-105 active:scale-95 shadow-2xl shadow-amber-900/50 font-cinzel tracking-wide border border-amber-400/30"
           >
             🕉️ Begin Your Journey
@@ -389,7 +400,10 @@ export function App() {
           </div>
 
           <button
-            onClick={() => setScreen("title")}
+            onClick={() => {
+              playClickSFX();
+              setScreen("title");
+            }}
             className="mt-6 w-full bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold py-3 rounded-xl transition-all border border-slate-700"
           >
             ← Back to Title
@@ -475,7 +489,10 @@ export function App() {
           </div>
 
           <button
-            onClick={() => setScreen("mission_hub")}
+            onClick={() => {
+              playClickSFX();
+              setScreen("mission_hub");
+            }}
             className="w-full font-bold py-4 text-xl rounded-xl transition-all hover:scale-105 active:scale-95 font-cinzel text-white border"
             style={{
               background: `linear-gradient(to right, ${level.accentColor}99, ${level.accentColor}66)`,
@@ -586,6 +603,7 @@ export function App() {
 
               <button
                 onClick={() => {
+                  playClickSFX();
                   if (currentMission.type === "dialogue") {
                     setSelectedNpc(level.npcs[dialogueNpc]?.id || null);
                     setScreen("dialogue");
@@ -685,7 +703,10 @@ export function App() {
         <div className="max-w-xl mx-auto space-y-5">
           <div className="flex items-center gap-3">
             <button
-              onClick={() => setScreen("mission_hub")}
+              onClick={() => {
+                playClickSFX();
+                setScreen("mission_hub");
+              }}
               className="text-slate-400 hover:text-white text-sm border border-slate-700 px-3 py-1.5 rounded-lg"
             >
               ← Back
@@ -735,6 +756,7 @@ export function App() {
                 <button
                   key={i}
                   onClick={() => {
+                    playClickSFX();
                     const nextNpc = dialogueNpc + 1;
                     if (nextNpc < level.npcs.length) {
                       setDialogueNpc(nextNpc);
@@ -752,7 +774,10 @@ export function App() {
             </div>
           ) : (
             <button
-              onClick={() => setDialogueStep((s) => s + 1)}
+              onClick={() => {
+                playClickSFX();
+                setDialogueStep((s) => s + 1);
+              }}
               className="w-full bg-amber-700 hover:bg-amber-600 text-white font-bold py-3 rounded-xl transition-all"
             >
               Continue →
@@ -1149,6 +1174,7 @@ export function App() {
               <button
                 key={i}
                 onClick={() => {
+                  playClickSFX();
                   awardXP(
                     opt.xp,
                     opt.karma > 0 ? opt.karma : 0,
@@ -1315,6 +1341,7 @@ export function App() {
           <div className="grid grid-cols-3 gap-3">
             <button
               onClick={() => {
+                playClickSFX();
                 if (cluesFound < totalClues) {
                   setCluesFound((c) => c + 1);
                   showMsg("🔍 Found a clue!");
@@ -1327,6 +1354,7 @@ export function App() {
             </button>
             <button
               onClick={() => {
+                playClickSFX();
                 if (trapsDisarmed < totalTraps) {
                   setTrapsDisarmed((t) => t + 1);
                   showMsg("💣 Disarmed a trap!");
@@ -1339,6 +1367,7 @@ export function App() {
             </button>
             <button
               onClick={() => {
+                playClickSFX();
                 if (isComplete) {
                   awardXP(
                     60,
@@ -1522,6 +1551,7 @@ export function App() {
           <div className="flex flex-col gap-3">
             <button
               onClick={() => {
+                playClickSFX();
                 setMissions([...GAME_LEVELS[currentLevelIndex].missions]);
                 setMissionIndex(0);
                 setPlayer((p) => ({
@@ -1536,6 +1566,7 @@ export function App() {
             </button>
             <button
               onClick={() => {
+                playClickSFX();
                 setPlayer(PLAYER_CHARACTER);
                 setCurrentLevelIndex(0);
                 setUnlockedLevels([0]);
@@ -1635,6 +1666,7 @@ export function App() {
 
           <button
             onClick={() => {
+              playClickSFX();
               setPlayer(PLAYER_CHARACTER);
               setCurrentLevelIndex(0);
               setUnlockedLevels([0]);
